@@ -8,8 +8,6 @@
         public string Salutation { get; set; }
         public string Gender { get; set; }
         public List<string> Interests { get; set; }
-
-        //public DemographicDetails DemographicDetails { get; set; }
         public List<EducationInformation> EducationInformation { get; set; }
         public List<ExperienceInformation> ExperienceInformation { get; set; }
         public List<Address> Address { get; set; }

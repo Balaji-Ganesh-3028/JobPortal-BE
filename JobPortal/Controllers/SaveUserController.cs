@@ -189,7 +189,7 @@ namespace JobPortal.Controllers
                                     OperationType = operationType,
                                 };
 
-                                return Ok(new { data });
+                                return Ok( data );
                             }
                             else
                             {
