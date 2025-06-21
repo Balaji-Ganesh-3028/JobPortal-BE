@@ -3,22 +3,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using System.Data;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace JobPortal.Controllers
 {
-    public class GetAllUsersController : Controller
+    public class GetUserController : Controller
     {
         public readonly IConfiguration _configuration;
-        public GetAllUsersController(IConfiguration configuration)
+        public GetUserController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        [HttpGet("getAllUsers")]
-        public async Task<IActionResult> GetAllUsers()
+        [HttpPost("getUser")]
+        public async Task<IActionResult> GetAllUsers([FromBody] int userId)
         {
+            if(userId == 0)
+            {
+                return BadRequest("User ID is required.");
+            }
             string connectionString = _configuration["ConnectionStrings:JobPortalDB"];
 
             try
@@ -28,13 +30,14 @@ namespace JobPortal.Controllers
                 {
                     await connection.OpenAsync();
 
-                    using (SqlCommand command = new SqlCommand("GetAllEmployees", connection))
+                    using (SqlCommand command = new SqlCommand("GetEmployeeDetails", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@UserId", userId);
 
                         using (SqlDataReader reader = await command.ExecuteReaderAsync())
                         {
-                            var users = new List<UserProfile>(); // Replace object with your user model
+                            var user = new UserProfile(); // Replace object with your user model
                             List<MastersList> interests = new List<MastersList>();
                             List<EducationInformation> educationInformation = new List<EducationInformation>();
                             List<ExperienceInformation> experienceInformation = new List<ExperienceInformation>();
@@ -98,10 +101,10 @@ namespace JobPortal.Controllers
                                         City = a.City,
                                     }).ToList();
                                 }
-                               
+
 
                                 // Map the data to your user model
-                                var user = new UserProfile
+                                user = new UserProfile
                                 {
                                     UserId = Convert.ToInt32(reader["Id"]),
                                     FirstName = reader["FirstName"].ToString(),
@@ -114,15 +117,13 @@ namespace JobPortal.Controllers
                                     ExperienceInformation = experienceInformation,
                                     Address = address
                                 };
-                                users.Add(user);
                             }
 
-
-                            return Ok(users);
+                            return Ok(user);
                         }
                     }
-                
                 }
+
             }
             catch (Exception ex)
             {

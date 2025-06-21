@@ -15,7 +15,7 @@ namespace JobPortal.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost("InserOrUpdateUser")]
+        [HttpPost("InsertUser")]
         public async Task<IActionResult> InserOrUpdateUser([FromBody] UserProfile userProfile)
         {
             if (userProfile == null)
@@ -44,7 +44,6 @@ namespace JobPortal.Controllers
                         using (SqlDataReader reader = await command.ExecuteReaderAsync())
                         {
                             DataTable dt = new DataTable();
-                            //dt.Load(reader); // Load the result set into a DataTable
                             if (reader.Read()) 
                             {
                                 int userId = Convert.ToInt32(reader["Id"]);
@@ -59,12 +58,13 @@ namespace JobPortal.Controllers
                                     DataTable interestTable = new DataTable();
                                     interestTable.Columns.Add("userid", typeof(int));
                                     interestTable.Columns.Add("intrest_id", typeof(string));
+
                                     foreach (var interest in userProfile.Interests)
                                     {
-                                        interestTable.Rows.Add(userId, interest);
+                                        interestTable.Rows.Add(userId, interest.value);
                                     }
 
-                                    using (SqlCommand interestCmd = new SqlCommand("InsertorUpdateUsersInterest", connection))
+                                    using (SqlCommand interestCmd = new SqlCommand("InsertUsersInterest", connection))
                                     {
                                         interestCmd.CommandType = CommandType.StoredProcedure;
                                         SqlParameter interestParam = interestCmd.Parameters.AddWithValue("@UserInterests", interestTable);

@@ -45,7 +45,7 @@ namespace JobPortal.Controllers
                                 {
                                     id = reader.GetInt32(reader.GetOrdinal("id")),
                                     code = reader["code"].ToString(),
-                                    name = reader["value"].ToString()
+                                    value = reader["value"].ToString()
                                 };
 
                                 state.Add(data);

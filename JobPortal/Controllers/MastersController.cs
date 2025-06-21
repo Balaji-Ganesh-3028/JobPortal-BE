@@ -48,7 +48,7 @@ namespace JobPortal.Controllers
                                 {
                                     id = reader.GetInt32(reader.GetOrdinal("id")),
                                     code = reader["code"].ToString(),
-                                    name = reader["value"].ToString()
+                                    value = reader["value"].ToString()
                                 };
 
                                 salutation.Add(data);
@@ -72,7 +72,7 @@ namespace JobPortal.Controllers
                                 {
                                     id = reader.GetInt32(reader.GetOrdinal("id")),
                                     code = reader["code"].ToString(),
-                                    name = reader["value"].ToString()
+                                    value = reader["value"].ToString()
                                 };
 
                                 gender.Add(data);
@@ -96,7 +96,7 @@ namespace JobPortal.Controllers
                                 {
                                     id = reader.GetInt32(reader.GetOrdinal("id")),
                                     code = reader["code"].ToString(),
-                                    name = reader["value"].ToString()
+                                    value = reader["value"].ToString()
                                 };
 
                                 interest.Add(data);
@@ -120,7 +120,7 @@ namespace JobPortal.Controllers
                                 {
                                     id = reader.GetInt32(reader.GetOrdinal("id")),
                                     code = reader["code"].ToString(),
-                                    name = reader["value"].ToString()
+                                    value = reader["value"].ToString()
                                 };
 
                                 credential.Add(data);
@@ -144,7 +144,7 @@ namespace JobPortal.Controllers
                                 {
                                     id = reader.GetInt32(reader.GetOrdinal("id")),
                                     code = reader["code"].ToString(),
-                                    name = reader["value"].ToString()
+                                    value = reader["value"].ToString()
                                 };
 
                                 addressType.Add(data);
@@ -168,7 +168,7 @@ namespace JobPortal.Controllers
                                 {
                                     id = reader.GetInt32(reader.GetOrdinal("id")),
                                     code = reader["code"].ToString(),
-                                    name = reader["value"].ToString()
+                                    value = reader["value"].ToString()
                                 };
 
                                 country.Add(data);
