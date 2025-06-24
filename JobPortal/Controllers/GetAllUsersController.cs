@@ -35,7 +35,7 @@ namespace JobPortal.Controllers
                         using (SqlDataReader reader = await command.ExecuteReaderAsync())
                         {
                             var users = new List<UserProfile>(); // Replace object with your user model
-                            List<MastersList> interests = new List<MastersList>();
+                            List<InterestList> interests = new List<InterestList>();
                             List<EducationInformation> educationInformation = new List<EducationInformation>();
                             List<ExperienceInformation> experienceInformation = new List<ExperienceInformation>();
                             List<Address> address = new List<Address>();
@@ -51,7 +51,13 @@ namespace JobPortal.Controllers
 
                                 if (!string.IsNullOrWhiteSpace(interestsJson))
                                 {
-                                    interests = JsonConvert.DeserializeObject<List<MastersList>>(interestsJson) ?? new List<MastersList>();
+                                    var interestsData = JsonConvert.DeserializeObject<List<InterestDto>>(interestsJson) ?? new List<InterestDto>();
+
+                                    interests = interestsData.Select(i => new InterestList
+                                    {
+                                        interestId = i.InterestId,
+                                        value = i.value
+                                    }).ToList();
                                 }
 
                                 if (!string.IsNullOrWhiteSpace(educationJson))

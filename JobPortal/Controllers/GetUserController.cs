@@ -14,8 +14,8 @@ namespace JobPortal.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost("getUser")]
-        public async Task<IActionResult> GetAllUsers([FromBody] int userId)
+        [HttpGet("getUser/{userId}")]
+        public async Task<IActionResult> GetAllUsers(int userId)
         {
             if(userId == 0)
             {
@@ -29,6 +29,7 @@ namespace JobPortal.Controllers
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     await connection.OpenAsync();
+                    Console.WriteLine("Connection opened successfully.", userId);
 
                     using (SqlCommand command = new SqlCommand("GetEmployeeDetails", connection))
                     {
@@ -38,7 +39,7 @@ namespace JobPortal.Controllers
                         using (SqlDataReader reader = await command.ExecuteReaderAsync())
                         {
                             var user = new UserProfile(); // Replace object with your user model
-                            List<MastersList> interests = new List<MastersList>();
+                            List<InterestList> interests = new List<InterestList>();
                             List<EducationInformation> educationInformation = new List<EducationInformation>();
                             List<ExperienceInformation> experienceInformation = new List<ExperienceInformation>();
                             List<Address> address = new List<Address>();
@@ -54,7 +55,13 @@ namespace JobPortal.Controllers
 
                                 if (!string.IsNullOrWhiteSpace(interestsJson))
                                 {
-                                    interests = JsonConvert.DeserializeObject<List<MastersList>>(interestsJson) ?? new List<MastersList>();
+                                    var interestsData = JsonConvert.DeserializeObject<List<InterestDto>>(interestsJson) ?? new List<InterestDto>();
+
+                                    interests = interestsData.Select(i => new InterestList
+                                    {
+                                        interestId = i.InterestId,
+                                        value = i.value
+                                    }).ToList();
                                 }
 
                                 if (!string.IsNullOrWhiteSpace(educationJson))
